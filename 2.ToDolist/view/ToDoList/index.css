@@ -1,0 +1,14 @@
+.main {
+  margin: 0 auto;
+  width: 500px;
+  height: 100vh;
+}
+
+.main .btn {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+}
+.main .btn .ant-btn  {
+  margin: 0 10px;
+}

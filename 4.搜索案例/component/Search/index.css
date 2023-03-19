@@ -1,0 +1,11 @@
+.search {
+  display:  flex;
+  width: 30%;
+  height: 60px;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.search .ant-btn  {
+  margin-left: 20px;
+}
