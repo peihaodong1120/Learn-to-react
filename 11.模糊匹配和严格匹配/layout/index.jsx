@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './index.css'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import About from '../pages/About'
 import Home from '../pages/Home'
 import Test from '../pages/Test'
@@ -24,7 +24,8 @@ export default class Layout extends Component {
             {/* 封装NavLink */}
             <MyNavLink to='/about' a={1} b={2}>About</MyNavLink>
             <MyNavLink to='/home'>Home</MyNavLink>
-            <MyNavLink to='/test'>test</MyNavLink>
+            {/* to='/test/a/b' 在模糊匹配中 Route中的path='/test' 就可以匹配到该路由  在严格匹配中是不可以的*/}
+            <MyNavLink to='/test/a/b'>test</MyNavLink>
           </div>
           <div className='rigit'>
             {/* 注册路由 */}
@@ -35,8 +36,6 @@ export default class Layout extends Component {
               <Route path='/about' component={About} />
               <Route path='/home' component={Home} />
               <Route exact path='/test' component={Test} />
-              {/* 路由重定向，当所有路由都匹配不上的时候，就会跳转到redirect上的路径 */}
-              <Redirect to='/about' />
             </Switch>
           </div>
         </div>
