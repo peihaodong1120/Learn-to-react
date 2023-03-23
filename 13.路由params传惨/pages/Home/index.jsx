@@ -39,16 +39,13 @@ export default class Home extends Component {
       <div className='main_box'>
         <h1>俺是home页面</h1>
         <div className='menu_btn'> 
-        {/* 设置二级路由 */}
           <MyNavLink to='/home/news' >NEWS</MyNavLink>
           <MyNavLink to='/home/message' >MESSAGE</MyNavLink>
         </div>
         <div>
-          {/* 注册路由 */}
         <Switch>
           <Route path='/home/news' component={News}></Route>
           <Route path='/home/message' component={Message}></Route>\
-          {/* 路由重定向 */}
           <Redirect to='/home/news'></Redirect>
         </Switch>
         </div>
