@@ -5,6 +5,7 @@ import About from '../pages/About'
 import Home from '../pages/Home'
 import Test from '../pages/Test'
 import MyNavLink from '../component/MyNavLink'
+import Header from './header'
 export default class Layout extends Component {
 
   handleIsActive = () =>{
@@ -16,7 +17,7 @@ export default class Layout extends Component {
     return (
       <div className='main'>
         <div className='header'>
-          <h2>Reack-Router</h2>
+        <Header a='1' ></Header>
         </div>
         <div className='conxxx'>
           <div className='left'>

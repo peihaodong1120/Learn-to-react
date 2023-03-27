@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
-import Layout from './layout/index.jsx'
-import './style/index.css'
+import './style/index.less'
+import { Button,Space } from 'antd';
 
 class App extends Component {
   render() {
-    return <div className="app">
-      <Layout>layout</Layout>
-    </div>
+    return (
+      <div className="app">
+        <Space>
+          <Button type="primary">Primary Button</Button>
+          <Button>Default Button</Button>
+          <Button type="dashed">Dashed Button</Button>
+          <Button type="text">Text Button</Button>
+          <Button type="link">Link Button</Button>
+        </Space>
+      </div>
+    )
   }
 }
 
