@@ -193,3 +193,8 @@ class Header extends Component {
 export default withRouter(Header)
 ```
 
+
+
+### redux
+
+##### 1、基本使用
