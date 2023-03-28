@@ -1,7 +1,5 @@
 # React学习
 
-
-
 ### 路由
 
 ##### 1、路由传参
@@ -247,4 +245,77 @@ store.dispatch({ type: 'counter/decremented' })
 ```
 
 
+
+### 扩展
+
+##### 1、setState更新状态的2种写法
+
+-  setState(statechange, [callback]） ----对象式 
+
+  - statechange为状态改变对象（该对象可以体现出状态的更改）
+  - ca11back是可选的回调函数，它在状态更新完毕、界面也更新后 (render调用后)才被调用
+
+  ```jsx
+  this.setState({count:this.state.count + 1}, ()=>{
+      // render执行后执行该函数，recat数据更新是异步的，这里可以拿到最新的数据
+      console.log('对象式回调函数', this.state.count);
+  })
+  ```
+
+-  setState(updater, [callback]） ----对象式 
+
+  - updater为返回statechange对象的函数
+  - updater可以接收到state和props
+  - ca11back是可选的回调函数，它在状态更新完毕、界面也更新后 (render调用后)才被调用
+
+  ```jsx
+   this.setState((state, props) =>{
+                  console.log('函数式更新状态',state, props);
+                  return {count: state.count + props.a}
+              },()=>{
+                  // render执行后执行该函数，recat数据更新是异步的，这里可以拿到最新的数据
+                  console.log('函数式回调函数', this.state.count);
+              })
+  ```
+
+- 总结
+
+  - 对象式的setstate是函数式的setstate的简写方式(语法糖）
+  - 更新状态不依赖于原状态，使用对象式
+  - 更新状态依赖于原状态，使用函数式
+
+##### 2、lazy 懒加载
+
+- 在路由组件中引入lazy函数并且使用懒加载
+
+```jsx
+import React, {Component, lazy, Suspense} from 'react' // 引入懒加载函数， 使用懒加载必须使用Suspense组件
+import {Link, Route} from 'react-router-dom'
+import Loading from './loading'
+
+// 路由组件懒加载引入方式
+const Home = lazy(()=> import('./home'))
+const Message = lazy(()=> import('./message'))
+
+export default class Demo extends Component {
+    render() {
+        return(
+            <div>
+                <h1>header</h1>
+                <div>
+                    <Link to={'/home'}>home页面</Link>
+                    <Link to={'/message'}>message页面</Link>
+                </div>
+                <div>
+          // 在注册懒加载组件的时候，必须使用Suspense组件指定一个默认组件。这个组件是在路由组件因网络等原因无法加载出来时显示的
+                <Suspense fallback={<Loading/>}>
+                    <Route path={'/home'} component={Home}></Route>
+                    <Route path={'/message'} component={Message}></Route>
+                </Suspense>
+                </div>
+            </div>
+        )
+    }
+}
+```
 
