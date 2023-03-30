@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import './style/index.less'
-import Demo from './components/_lazy'
+import './style/index.css'
+import Demo from './components/_renderProps'
 class App extends Component {
 
   render() {

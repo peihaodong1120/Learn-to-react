@@ -248,7 +248,7 @@ store.dispatch({ type: 'counter/decremented' })
 
 ### 扩展
 
-##### 1、setState更新状态的2种写法
+##### 1、setState的2种写法
 
 -  setState(statechange, [callback]） ----对象式 
 
@@ -316,6 +316,267 @@ export default class Demo extends Component {
             </div>
         )
     }
+}
+```
+
+
+
+##### 3、常用Hooks
+
+*Hook* 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。(在函数式组件中使用)
+
+- ​	state Hook
+
+```jsx
+import React, {useState} from "react"; // 
+import {Button} from 'antd'
+
+// 函数式组件
+const Demo = function() {
+    // useState(初始化值)  会返回两个元素的数组，第一元素是初始化的值，第二个元素是改变状态的函数
+    const [count, setCount] = useState(0); 
+    const [data,setData] = useState({   // 和vue3的reactive非常相似
+        a:1,
+        b:{
+            name:'章三'
+        }
+    })
+    const handleCountAdd = () =>{
+        // setCount(count+1) // 写法1
+        // 写法2，传入一个函数，函数参数是上一次的状态
+        setCount((count)=>{
+            return count + 1
+        })
+        console.log(data);
+        setData({a:2})
+    }
+
+    return (
+        <div>
+            <h1>总数{count}</h1>
+            <Button onClick={handleCountAdd}>点击➕1</Button>
+        </div>
+    )
+}
+
+export default Demo
+```
+
+- effect Hook
+
+  Effect Hook 可以让你在函数组件中执行副作用操作
+
+```jsx
+import React, {useState, useEffect} from "react"; // 
+import {Button} from 'antd'
+// 函数式组件
+const Demo = function() {
+    const [count, setCount] = useState(0); 
+    // Effect Hook 可以让你在函数组件中执行副作用操作
+    // Effect Hook 可以看作componentDidMount，componentDidUpdate 和 componentWillUnmount 这三个生命周期钩子
+    useEffect(()=>{
+        // 可以做任何副作用操作
+      	// 页面渲染，开启定时器
+        let timer = setInterval(()=>{
+            setCount(count=> count+ 1)
+        }, 10000)
+        return () =>{
+            // 返回一个函数，这个函数在组件卸载前执行
+          	// 页面卸载之前，关闭定时器
+            clearInterval(timer)
+        }
+    },[]) // 如果制定空数组，useEffect的回调函数只在第一次render执行后执行，如果指定state状态，指定哪个状态，状态改变就会执行回调
+    const handleCountAdd = () =>{
+        setCount((count)=>{
+            return count + 1
+        })
+    }
+
+    return (
+        <div>
+            <h1>总数{count}</h1> 
+            <Button onClick={handleCountAdd}>点击➕1</Button>
+        </div>
+    )
+}
+
+export default Demo
+```
+
+- ref Hook
+
+```jsx
+import React, {useState, useRef} from "react"; // 引入useRef
+import {Button, Input, message} from 'antd'
+// 函数式组件
+const Demo = function() {
+    const [count, setCount] = useState(0); 
+    const [messageApi, contextHolder] = message.useMessage()
+    const myRef = useRef() // 使用
+
+    const handleCountAdd = () =>{
+        setCount((count)=>{
+            return count + 1
+        })
+    }
+    const handleChange = () =>{
+        console.log(myRef);
+        // 获取ref内容
+        messageApi.info(myRef.current.input.value)
+    }
+
+    return (
+        <div>
+            {contextHolder}
+            <h1>总数{count}</h1>
+            <Input ref={myRef} placeholder="请输入内容"></Input> {/*使用ref*/}
+            <Button onClick={handleCountAdd}>点击➕1</Button>
+            <Button onClick={handleChange}>点击弹出input内容</Button>
+        </div>
+    )
+}
+
+export default Demo
+```
+
+##### 4、Fragment
+
+- 类似vue的template， 但是Fragment不会转换为真实的dom节点。
+- 有一个key属性，可以进行遍历循环操作
+
+##### 5、context
+
+- 组件隔代通讯。祖组件向子孙组件传递数据
+- 引入createContext
+
+```jsx
+import React, {Component, createContext, Fragment} from "react";
+```
+
+- 创建context对象， 必须创建在所有组件都能接触到公共区域
+
+```jsx
+// 创建一个context对象
+const MyContext = createContext()
+```
+
+- 使用 `MyContext.Provider`包裹祖先组件进行传递，并且`MyContext.Provider`接收一个value属性传递给消费组件
+
+```jsx
+// 每个 Context 对象都会返回一个 Provider React 组件，它允许消费组件订阅 context 的变化。
+const {Provider} = MyContext 
+
+{/* 使用Provider组件包裹消费组件，多个 Provider 也可以嵌套使用，里层的会覆盖外层的数据。 */}
+<Provider value={{name, age}}>
+   <AA/>
+</Provider>
+```
+
+- 消费（子孙）组件使用传递过来的数据
+
+  - 类式组件
+
+  ```jsx
+  class BB extends Component {
+      // 消费组件静态属性contextType赋值创建的context对象
+      static contextType = MyContext;
+      render() {
+          // 然后可以在this.context获取到祖先组件传递过来的数据
+          console.log('组件BB',this.context);
+          const {name, age} = this.context
+          return (
+              <Fragment>
+                  <div className="progeny1">
+                      <h3>孙子组件</h3>
+                      <h4>我的名字叫：{name}, 年龄：{age}</h4>
+                  </div>
+              </Fragment>
+          )
+      }
+  }
+  ```
+
+  - 函数式组件
+
+  ```jsx
+  const {Consumer} = MyContext
+  
+  function CC() {
+      return (
+          <Fragment>
+              <div className="progeny2">
+                  <h3>孙子组件</h3>
+                  {/* 函数式组件，要使用context对象中的Consumer来接收传递的数据 */}
+                  <Consumer>
+                      {value => {
+                          console.log('组件CC', value)
+                          return <h4>我的名字叫：{value.name},年龄：{value.age}</h4>
+                      }}
+                  </Consumer>
+                  
+              </div>
+          </Fragment>
+      )
+  }
+  ```
+
+##### 6、组件优化
+
+- 使用PureComponent代替Component。会对state和props进行浅比较据改变才会调用render重新渲染页面
+
+```jsx
+class Demo extends PureComponent{
+	render() {
+		return(
+			<div></div>
+		)
+	}
+}
+```
+
+##### 7、renderProps（插槽）
+
+- 和vue中的slot非常相似，都是在一个组件内预留位置，可以传入任意结构灵活渲染组件
+
+  - childrenProps
+
+  ```jsx
+  // 通过组件标签体传入结构。
+  <BB>
+    <CC age={age}></CC>
+  </BB>
+  
+  // 组件BB内渲染CC组件， 只能渲染，CC组件不能拿到BB组件的数据
+  {this.props.children}
+  ```
+
+  - renderProps
+
+  ```jsx
+  // 通过标签属性传入结构。一般用render
+  <BB render={(name)=> <CC name={name}/>} />
+  
+  // 组件BB内渲染CC组件， 并且可以给CC组件传递数据
+  {this.props.render(' 张三')}
+  ```
+
+##### 8、错误边界
+
+- 错误边界（Error Boundaries），用来捕获后代组件错误。渲染备用页面
+- 特点：只能捕获后代组件生命周期产生的错误，主要捕获render中产生的错误
+- getDerivedStateFromError 配合 componentDidCatch使用
+
+```jsx
+// 捕获错误
+static getDerivedStateFromError(error) {
+   console.log('@@2',error);
+   return {
+     hasError: true
+   }
+}
+// 统计错误次数，通知服务端
+componentDidCatch(error, info){
+  console.log('xxxx', error, info);
 }
 ```
 
