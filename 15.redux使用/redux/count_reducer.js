@@ -1,4 +1,4 @@
-import {ADD, SUBSCRIBE}from './common'
+import {ADD, SUBSCRIBE}from './constant'
 
 //  初始化数据
 /*

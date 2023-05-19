@@ -1,7 +1,7 @@
 // 引入reactDom
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import './style/index.css'
+import './style/index.less'
 // 引入App组件
 import App from './App'
 // Dom容器
