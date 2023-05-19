@@ -2,6 +2,8 @@
 
 ### 路由
 
+#### React-router5以下
+
 ##### 1、路由传参
 
 - params传参
@@ -193,7 +195,82 @@ export default withRouter(Header)
 
 
 
+#### React-router6
+
+##### 1、注册路由组件
+
+- 使用Routes代替 Switch ，使用element 代替component
+
+```jsx
+import {Routes, Route} from 'react-router-dom'
+<Routes>
+	<Route path='/home' element={<Home/>}></Route> 
+</Routes>
+```
+
+##### 2、路由重定向
+
+- 使用Navigate组件代替Redirect
+
+```jsx
+import {Routes, Route, Navigate} from 'react-router-dom'
+<Routes>
+	{/* react6 路由重定向，/默认访问 home组件 */}
+  <Route path='/' element={<Navigate to={'/home'}/>} ></Route>
+  {/* 组册路由组件 */}
+   <Route path='/home' element={<Home />}></Route>
+   <Route path='/about' element={<About />}></Route>
+</Routes>
+```
+
+##### 3、NavLink高亮效果
+
+- NavLink的className需要传入一个函数。代替activeClassName
+
+```jsx
+// 传入一个函数，函数会得到一个isActive：true 或者 isActive：false 字段。通过isActive判断是否添加高亮类名。要将类名返回出去
+<NavLink className={({isActive}) => isActive? 'item isActive': 'item'} to={'/home'}>
+```
+
+##### 4、useRoutes Hook
+
+- 可以使用路由表代替组件式路由
+
+```jsx
+import {useRouters Navigate} from 'react-router-dom'
+
+// 定义路由表一般在 src/Router/index 中， 导出
+const routers = [
+    {
+        path:'/',
+        element: <Navigate to={'/home'}/> // 路由重定向
+    },
+    {
+        path:'/home',
+        element: <Home/>
+    },
+    {
+        path:'/about',
+        element: <About/>
+    },
+]
+
+// 使用路由 在组件中， 使用useRouters
+const App = () =>{
+  const element = useRouters(routers)
+  return (
+  	<div>
+      {element}
+    </div>
+  )
+}
+```
+
+
+
 ### redux
+
+一个专门做状态管理的js库
 
 ##### 1、基本使用
 
@@ -262,7 +339,7 @@ store.dispatch({ type: 'counter/decremented' })
   })
   ```
 
--  setState(updater, [callback]） ----对象式 
+-  setState(updater, [callback]） ----函数式
 
   - updater为返回statechange对象的函数
   - updater可以接收到state和props
