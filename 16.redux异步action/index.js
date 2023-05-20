@@ -4,16 +4,17 @@ import { BrowserRouter } from 'react-router-dom'
 import './style/index.less'
 // 引入App组件
 import App from './App'
-
-// import store from './redux/store'
 // Dom容器
 const container = document.getElementById('App')
 
+/*
+ NavLink 可以实现路由链接的高亮，通过activeClassName 指定样式名
+ 标签体内容是一个特殊的表签属性，可以通过this.props,children获取表签体内容
+*/
 
 const root = createRoot(container) // createRoot(container!) if you use TypeScript
-// 监测redux中状态的改变使用 store.subscribe
-  root.render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  )
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+)
