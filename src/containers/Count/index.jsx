@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { Select, Space, Button } from 'antd';
 
 import {connect} from 'react-redux'
-import {addCount, addCountSync, subtractionCount} from '../../redux/create_action'
+import {addCount, addCountSync, subtractionCount} from '../../redux/action/count'
 
 // UI组件
 class Count extends Component {
@@ -37,9 +37,11 @@ class Count extends Component {
     }
     
     render() {
+        const {count, person} = this.props.count
         return (
             <div>
-                <h1>当前求和状态为{this.props.count}</h1>
+                <h1>Count组件</h1>
+                <h3>当前求和状态为{count}, 下方组件总人数为{person.length}</h3>
                 <div>
                     <Space>
                         <Select

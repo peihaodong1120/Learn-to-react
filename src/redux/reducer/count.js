@@ -1,4 +1,4 @@
-
+import {ADD, SUBTRACT} from '../constants'
 //  初始化数据
 /*
     1、该文件上用于创建一个为count服务的reducer函数 
@@ -10,9 +10,9 @@ const countReducer = function(pre = initData, action) {
     const {type, data} = action
     console.log(pre,action);
     switch (type) {
-        case 'add':
+        case ADD:
             return pre + data
-        case 'subtract':
+        case SUBTRACT:
             return pre - data
         default: 
             return pre
