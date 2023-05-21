@@ -334,7 +334,21 @@ store.dispatch({ type: 'counter/decremented' })
 // {value: 1}
 ```
 
+##### 3、react-redux 基本使用
 
+1. 明确两个概念：
+
+   1. UI组件：不能使用任何redux的api，只负责页面的呈现、交互等
+   2. 容器组件：负责和redux通信，将结果交给Ui组件。
+
+2. 创建容器组件——靠react-redux等connect函数
+
+   ​	connect(mapStateToProps, mapDispatchToProps)(UI组件)
+
+   1. mapStateToProps：映射状态，返回值为对象
+   2. mapDispatchToProps：映射操作状态的方法，返回值为一个对象
+
+3. 容器组件中的store时靠props传进去的，而不是在容器组件中直接引入
 
 ### 扩展
 
